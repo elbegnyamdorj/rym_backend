@@ -13,6 +13,10 @@ class ObtainTokenPair(TokenObtainPairView):
 
 
 class UserCreate(APIView):
+    """
+        Хэрэглэгч бүртгэх класс. Өмнө нь бүртгэлгүй байсан бол шууд бүртгэнэ.
+        Хэрэв багш Group-д нэмэхдээ бүртэгсэн бол тухайн мөр бичлэгийг олон update хийнэ.
+    """
     permission_classes = (permissions.AllowAny,)
     authentication_classes = ()
 
@@ -23,13 +27,18 @@ class UserCreate(APIView):
             if user:
                 json = serializer.data
                 return Response(json, status=status.HTTP_201_CREATED)
+
         elif Users.objects.filter(email = request.data['email']).exists():
             user = Users.objects.get(email = request.data['email'])
-            serializer = UserSerializer(user)
-            data = serializer.data
-            if data['password']=="":
-                user = Users.objects._create_user(**request.data)
-                return Response(user)
+            us_serializer = UserSerializer(user)
+            password = us_serializer.data['password']
+            if password == "":
+                user = Users.objects.create_preuser(**request.data)
+                json = UserSerializer(data = user)
+                return Response(json)
+
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -58,8 +67,9 @@ class CreateGroup(APIView):
         data = request.data
         stud_list = data['student_list']
         data.pop('student_list')
-
         
+
+
         serializer = GroupSerializer(data=data)
         if serializer.is_valid():
             group = serializer.save()
