@@ -16,7 +16,7 @@ class UserType(models.Model):
 
 class UserManager(BaseUserManager):
     """DONE"""
-    
+
     """Define a model manager for User model with no username field."""
     use_in_migrations = True
 
@@ -98,7 +98,7 @@ class SubGroup(models.Model):
     subgroup_name = models.CharField(max_length=100)
     group_id = models.ForeignKey(Group, on_delete=CASCADE)
     is_active = models.BooleanField(default=True)
-    deadline = models.DateTimeField()
+    deadline = models.DateTimeField(auto_now_add=True)
 
 
 class TeamMember(models.Model):

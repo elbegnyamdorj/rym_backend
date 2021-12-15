@@ -32,26 +32,29 @@ class UserSerializer(serializers.ModelSerializer):
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ('teacher_id', 'group_number',
+        fields = ('id', 'teacher_id', 'group_number',
                   'lesson_name', 'is_active', 'created_at')
+
 
 class GroupStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupStudents
-        fields =('group_id','student_id')
+        fields = ('group_id', 'student_id')
+
 
 class SubGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubGroup
-        fields = ('subgroup_name','group_id','deadline')
+        fields = ('subgroup_name', 'group_id', 'deadline', 'is_active')
+
 
 class TeamMemberSerializer(serializers.ModelSerializer):
     class Meta:
-        model:TeamMember
+        model: TeamMember
         fields = ('subgroup_id', 'group_student_id')
+
 
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:
-        model:TeamMember
+        model: TeamMember
         fields = ('team_member_id', 'rc_name', 'rating_value', 'comment')
-
