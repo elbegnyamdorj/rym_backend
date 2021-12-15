@@ -1,7 +1,7 @@
 from django.db.models import fields
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
-from .models import Group, GroupStudents, SubGroup, Users
+from .models import Group, GroupStudents, SubGroup, TeamMember, Users
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -22,7 +22,6 @@ class UserSerializer(serializers.ModelSerializer):
     # )
     # username = serializers.CharField()
     # password = serializers.CharField(min_length=8, write_only=True)
-
     class Meta:
         model = Users
         fields = ('email', 'password',
@@ -45,3 +44,14 @@ class SubGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubGroup
         fields = ('subgroup_name','group_id','deadline')
+
+class TeamMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model:TeamMember
+        fields = ('subgroup_id', 'group_student_id')
+
+class RatingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model:TeamMember
+        fields = ('team_member_id', 'rc_name', 'rating_value', 'comment')
+
