@@ -12,6 +12,7 @@ class UserType(models.Model):
     user_type_name = models.CharField(max_length=50)
     description = models.CharField(max_length=100)
 
+
 class UserManager(BaseUserManager):
     """Define a model manager for User model with no username field."""
     use_in_migrations = True
@@ -29,14 +30,16 @@ class UserManager(BaseUserManager):
         return user
 
     def create_preuser(self, email, password, user_type_id, **extra_fields):
-        """
+        """ 
             Багш group-д нэмэхэд Users дотор үүссэн хаяг дараа нь 
             оюутан өөрөө бүртгүүлэх үед ашиглагдах method
         """
-        Users.objects.filter(email=email).update(user_type_id=UserType.objects.get(id=user_type_id), **extra_fields)
+        Users.objects.filter(email=email).update(
+            user_type_id=UserType.objects.get(id=user_type_id), **extra_fields)
         user = Users.objects.get(email=email)
         user.set_password(password)
         user.save()
+
         return user
 
     def create_superuser(self, email, password, **extra_fields):
