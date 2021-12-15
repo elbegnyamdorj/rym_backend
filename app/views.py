@@ -68,8 +68,6 @@ class CreateGroup(APIView):
         stud_list = data['student_list']
         data.pop('student_list')
         
-
-
         serializer = GroupSerializer(data=data)
         if serializer.is_valid():
             group = serializer.save()
@@ -90,6 +88,7 @@ class SubGroup(APIView):
     ### permission classuud daraa n ustgah ###
     permission_classes = (permissions.AllowAny,)
     authentication_classes = ()
+
     def post(self, request, format='json'):
         data = request.data
 
@@ -98,5 +97,39 @@ class SubGroup(APIView):
             subgroup = serializer.save()
 
             if subgroup:
+                json = serializer.data
+                return Response(json, status=status.HTTP_201_CREATED)
+
+
+class TeamMember(APIView):
+    ### permission classuud daraa n ustgah ###
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
+
+    def post(self, request, format='json'):
+        data = request.data
+
+        serializer = TeamMemberSerializer(data = data)
+        if serializer.is_valid():
+            team_member = serializer.save()
+
+            if team_member:
+                json = serializer.data
+                return Response(json, status=status.HTTP_201_CREATED)
+
+
+class Rating(APIView):
+    ### permission classuud daraa n ustgah ###
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
+
+    def post(self, request, format='json'):
+        data = request.data
+
+        serializer = TeamMemberSerializer(data = data)
+        if serializer.is_valid():
+            rating = serializer.save()
+
+            if rating:
                 json = serializer.data
                 return Response(json, status=status.HTTP_201_CREATED)

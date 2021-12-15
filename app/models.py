@@ -9,10 +9,13 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class UserType(models.Model):
+    """DONE"""
     user_type_name = models.CharField(max_length=50)
     description = models.CharField(max_length=100)
 
 class UserManager(BaseUserManager):
+    """DONE"""
+    
     """Define a model manager for User model with no username field."""
     use_in_migrations = True
 
@@ -53,6 +56,8 @@ class UserManager(BaseUserManager):
 
 
 class Users(AbstractUser):
+    """DONE"""
+
     """User model."""
     username = None
     email = models.EmailField(_('email address'), unique=True)
@@ -69,6 +74,8 @@ class RatingCriteria(models.Model):
 
 
 class Group(models.Model):
+    """DONE"""
+
     teacher_id = models.ForeignKey(Users, on_delete=models.CASCADE)
     group_number = models.CharField(max_length=4)
     lesson_name = models.CharField(max_length=30)
@@ -77,24 +84,29 @@ class Group(models.Model):
 
 
 class GroupStudents(models.Model):
+    """DONE"""
+
     group_id = models.ForeignKey(Group, on_delete=CASCADE)
     student_id = models.ForeignKey(Users, on_delete=CASCADE)
 
 
 class SubGroup(models.Model):
+    """DONE"""
     subgroup_name = models.CharField(max_length=100)
     group_id = models.ForeignKey(Group, on_delete=CASCADE)
     is_active = models.BooleanField(default=True)
-    deadline = models.DateField()
+    deadline = models.DateTimeField()
 
 
 class TeamMember(models.Model):
+    """DONE"""
     subgroup_id = models.ForeignKey(SubGroup, on_delete=CASCADE)
     group_student_id = models.ForeignKey(GroupStudents, on_delete=CASCADE)
 
 
 class Ratings(models.Model):
+    """DONE"""
     team_member_id = models.ForeignKey(TeamMember, on_delete=CASCADE)
     rc_name = models.CharField(max_length=1000)
     rating_value = models.IntegerField()
-    comment = models.CharField(max_length=5000)
+    comment = models.JSONField()
