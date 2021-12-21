@@ -49,7 +49,7 @@ class UserManager(BaseUserManager):
         """Create and save a SuperUser with the given email and password."""
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('user_type_id_id', 1)
+        extra_fields.setdefault('user_type_id', 1)
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
@@ -72,13 +72,13 @@ class Users(AbstractUser):
 
 class RatingCriteria(models.Model):
     rc_name = models.CharField(max_length=1000)
+    description = models.CharField(max_length=1000, default='')
     teacher_id = models.ForeignKey(Users, on_delete=CASCADE)
     is_default = models.BooleanField()
 
 
 class Group(models.Model):
     """DONE"""
-
     teacher_id = models.ForeignKey(Users, on_delete=models.CASCADE)
     group_number = models.CharField(max_length=4)
     lesson_name = models.CharField(max_length=30)
@@ -88,7 +88,6 @@ class Group(models.Model):
 
 class GroupStudents(models.Model):
     """DONE"""
-
     group_id = models.ForeignKey(Group, on_delete=CASCADE)
     student_id = models.ForeignKey(Users, on_delete=CASCADE)
 
@@ -100,16 +99,36 @@ class SubGroup(models.Model):
     is_active = models.BooleanField(default=True)
     deadline = models.DateTimeField(auto_now_add=True)
 
+# class Team(models.Model):
+#     team_name = models.CharField(max_length=180)
+#     subgroup_id = models.ForeignKey(SubGroup, on_delete=CASCADE)
+
 
 class TeamMember(models.Model):
     """DONE"""
+    team_name = models.CharField(max_length=180)
     subgroup_id = models.ForeignKey(SubGroup, on_delete=CASCADE)
     group_student_id = models.ForeignKey(GroupStudents, on_delete=CASCADE)
+
+
+"""
+[
+    oyutniiner:sda,
+    email:sda@gmail.com,
+    dun:[1,2,3,4,5,6,]
+]
+"""
+
+
+class Comments(models.Model):
+    good_comm = models.CharField(max_length=1000)
+    bad_comm = models.CharField(max_length=1000)
 
 
 class Ratings(models.Model):
     """DONE"""
     team_member_id = models.ForeignKey(TeamMember, on_delete=CASCADE)
     rc_name = models.CharField(max_length=1000)
+    rc_id = models.ForeignKey(RatingCriteria, on_delete=CASCADE, default=None)
     rating_value = models.IntegerField()
-    comment = models.JSONField()
+    comment_id = models.ForeignKey(Comments, on_delete=CASCADE, default=None)

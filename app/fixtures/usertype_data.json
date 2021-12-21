@@ -1,0 +1,17 @@
+[
+    {
+        "model":"app.usertype",
+        "pk":1,
+        "fields":{
+            "user_type_name":"Багш",
+            "description":""
+        }
+    },{
+        "model":"app.usertype",
+        "pk":2,
+        "fields":{
+            "user_type_name":"Оюутан",
+            "description":""
+        }
+    }
+]

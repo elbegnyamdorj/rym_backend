@@ -1,7 +1,7 @@
 from django.db.models import fields
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
-from .models import Group, GroupStudents, SubGroup, TeamMember, Users
+from .models import Comments, Group, GroupStudents, RatingCriteria, Ratings, SubGroup, TeamMember, Users
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -24,7 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
     # password = serializers.CharField(min_length=8, write_only=True)
     class Meta:
         model = Users
-        fields = ('email', 'password',
+        fields = ('id', 'email', 'password',
                   'first_name', 'last_name', 'user_type_id')
         # extra_kwargs = {'password': {'write_only': True}}
 
@@ -39,22 +39,39 @@ class GroupSerializer(serializers.ModelSerializer):
 class GroupStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupStudents
-        fields = ('group_id', 'student_id')
+        fields = ('id', 'group_id', 'student_id')
 
 
 class SubGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubGroup
-        fields = ('subgroup_name', 'group_id', 'deadline', 'is_active')
+        fields = ('id', 'subgroup_name', 'group_id', 'deadline', 'is_active')
 
 
 class TeamMemberSerializer(serializers.ModelSerializer):
     class Meta:
-        model: TeamMember
-        fields = ('subgroup_id', 'group_student_id')
+        model = TeamMember
+        fields = '__all__'
+
+
+# class TeamSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model: Team
+#         fields = ('subgroup_id', 'team_name')
+class RatingCriteriaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RatingCriteria
+        fields = ('id', 'rc_name', 'description', 'teacher_id', 'is_default')
 
 
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:
-        model: TeamMember
-        fields = ('team_member_id', 'rc_name', 'rating_value', 'comment')
+        model = Ratings
+        fields = ('team_member_id', 'rc_name', 'rc_id',
+                  'rating_value', 'comment_id')
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comments
+        fields = ('id', 'good_comm', 'bad_comm')
